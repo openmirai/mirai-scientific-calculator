@@ -8,6 +8,8 @@
 pnpm dlx shadcn@latest add @openmirai/calculator
 ```
 
+The `@openmirai` namespace is resolved from shadcn’s public registry directory.
+
 ## Documentation
 
 - [Overview](/)
@@ -30,8 +32,8 @@ pnpm dlx shadcn@latest add @openmirai/calculator
 
 ## Registry
 
-- [Calculator item](/r/calculator.json)
-- [Registry index](/r/registry.json)
+- [Calculator item](https://www.openmirai.dev/r/calculator.json)
+- [Registry index](https://www.openmirai.dev/r/registry.json)
 
 ## Source
 

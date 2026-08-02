@@ -62,7 +62,8 @@ export function InstallationPage() {
       <h1 className="mt-5 text-4xl font-semibold tracking-[-0.045em]">Installation</h1>
       <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">
         The shadcn registry is the complete UI distribution. It installs editable source and brings
-        the headless core with it, so consumers do not coordinate two setup flows.
+        the headless core with it. The @openmirai namespace is listed in shadcn’s public registry
+        directory, so no separate registry setup step is required.
       </p>
 
       <div className="mt-10">

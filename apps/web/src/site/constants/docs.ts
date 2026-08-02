@@ -6,6 +6,7 @@ export const DOCS_NAVIGATION = [
 ] as const
 
 export const INSTALLATION_NOTES = [
+  "Resolves the @openmirai namespace from shadcn’s public registry directory.",
   "Copies the calculator and all four Tailwind-styled mode modules.",
   "Adds the lightweight @openmirai/calculator-core package automatically.",
   "Uses your project’s configured shadcn style, including Base UI and Radix.",

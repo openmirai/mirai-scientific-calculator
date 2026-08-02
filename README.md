@@ -73,6 +73,8 @@ Run the shadcn CLI in an existing shadcn project:
 pnpm dlx shadcn@latest add @openmirai/calculator
 ```
 
+The `@openmirai` namespace is resolved from shadcn’s public registry directory.
+
 The registry item copies the calculator into
 `components/mirai-calculator`, installs its shadcn primitives, and automatically
 installs `@openmirai/calculator-core`. The copied component owns its styles, so
