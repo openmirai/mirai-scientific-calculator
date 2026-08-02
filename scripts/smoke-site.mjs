@@ -14,25 +14,23 @@ async function readSiteFile(relativePath) {
   }
 }
 
-const [indexHtml, calculatorJson, registryJson, llmsText, headersText, wranglerConfig] =
-  await Promise.all([
-    readSiteFile("index.html"),
-    readSiteFile("r/calculator.json"),
-    readSiteFile("r/registry.json"),
-    readSiteFile("llms.txt"),
-    readSiteFile("_headers"),
-    readFile(path.join(rootDirectory, "wrangler.toml"), "utf8"),
-  ])
+const [indexHtml, llmsText, headersText, wranglerConfig] = await Promise.all([
+  readSiteFile("index.html"),
+  readSiteFile("llms.txt"),
+  readSiteFile("_headers"),
+  readFile(path.join(rootDirectory, "wrangler.toml"), "utf8"),
+])
 
-const calculator = JSON.parse(calculatorJson)
-const registry = JSON.parse(registryJson)
-
-if (calculator.name !== "calculator") {
-  throw new Error("The deployed calculator registry item has an unexpected name")
-}
-
-if (!registry.items?.some((item) => item.name === "calculator")) {
-  throw new Error("The deployed registry index does not include the calculator item")
+try {
+  await access(path.join(siteDirectory, "r"))
+  throw new Error("The calculator site still includes the hosted registry directory")
+} catch (error) {
+  if (error instanceof Error && error.message.includes("still includes")) {
+    throw error
+  }
+  if (error?.code !== "ENOENT") {
+    throw error
+  }
 }
 
 if (!llmsText.includes("pnpm dlx shadcn@latest add @openmirai/calculator")) {
@@ -56,8 +54,6 @@ try {
 for (const expectedHeader of [
   "/assets/*",
   "max-age=31536000, immutable",
-  "/r/*",
-  "Access-Control-Allow-Origin: *",
   "X-Content-Type-Options: nosniff",
 ]) {
   if (!headersText.includes(expectedHeader)) {

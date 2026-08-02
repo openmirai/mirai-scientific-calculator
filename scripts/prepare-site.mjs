@@ -1,16 +1,9 @@
-import { copyFile, mkdir, stat, writeFile } from "node:fs/promises"
+import { rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 const rootDirectory = path.resolve(import.meta.dirname, "..")
 const siteDirectory = path.resolve(rootDirectory, process.argv[2] ?? "site-dist")
-const registryDirectory = path.join(siteDirectory, "r")
-
-const requiredFiles = [
-  path.join(siteDirectory, "index.html"),
-  path.join(siteDirectory, "llms.txt"),
-  path.join(rootDirectory, "registry-dist", "calculator.json"),
-  path.join(rootDirectory, "registry.json"),
-]
+const requiredFiles = [path.join(siteDirectory, "index.html"), path.join(siteDirectory, "llms.txt")]
 
 for (const file of requiredFiles) {
   try {
@@ -23,17 +16,7 @@ for (const file of requiredFiles) {
   }
 }
 
-await mkdir(registryDirectory, { recursive: true })
-await Promise.all([
-  copyFile(
-    path.join(rootDirectory, "registry-dist", "calculator.json"),
-    path.join(registryDirectory, "calculator.json")
-  ),
-  copyFile(
-    path.join(rootDirectory, "registry.json"),
-    path.join(registryDirectory, "registry.json")
-  ),
-])
+await rm(path.join(siteDirectory, "r"), { force: true, recursive: true })
 
 const headersText = `/*
   X-Content-Type-Options: nosniff
@@ -43,11 +26,6 @@ const headersText = `/*
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
-
-/r/*
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, HEAD, OPTIONS
-  Cache-Control: public, max-age=300, s-maxage=900, stale-while-revalidate=86400
 
 /llms.txt
   Cache-Control: public, max-age=300, s-maxage=900
