@@ -313,6 +313,42 @@ validates the checkout, publishes the committed core version, creates the Git
 tag and GitHub Release, uploads the generated assets, verifies npm, and deploys
 the showcase. Package deprecation stays a separate manual-only workflow.
 
+### npm Trusted Publishing
+
+The Release workflow publishes `@openmirai/calculator-core` with npm Trusted
+Publishing through GitHub Actions OIDC. It has `id-token: write`, uses the npm
+registry, disables release-build caching, and does not require an
+`NPM_TOKEN` or `NODE_AUTH_TOKEN`. npm generates provenance automatically for
+trusted publishes.
+
+Configure the trusted publisher for
+`@openmirai/calculator-core` in its npm package settings:
+
+- GitHub organization: `openmirai`
+- Repository: `mirai-scientific-calculator`
+- Workflow filename: `release.yml`
+- Environment: `cloudflare-production`
+- Allowed action: `npm publish`
+
+The same relationship can be configured with npm CLI 11.15 or newer by a
+maintainer with package write access and account-level two-factor
+authentication:
+
+```sh
+npm trust github @openmirai/calculator-core \
+  --repo openmirai/mirai-scientific-calculator \
+  --file release.yml \
+  --environment cloudflare-production \
+  --allow-publish
+```
+
+See npm's [Trusted Publishing documentation](https://docs.npmjs.com/trusted-publishers/)
+and [`npm trust` documentation](https://docs.npmjs.com/cli/v11/commands/npm-trust/)
+for the provider settings. After configuration, run the existing **Release**
+workflow; no npm token is needed for package publication. The separate
+`deprecate-legacy.yml` workflow remains token-authenticated because it performs
+the administrative `npm deprecate` operation rather than `npm publish`.
+
 ## License
 
 Released under the [MIT License](./LICENSE).
